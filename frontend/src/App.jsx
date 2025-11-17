@@ -2,7 +2,12 @@ import { Router, Routes, Route, } from 'react-router-dom';
 import Home from './pages/Home';
 import ExploreStartups from './pages/ExploreStartups';
 import JoinNow from './pages/JoinNow';
-import Navbar from './components/Navbar'; 
+import Navbar from './components/Navbar';
+import './App.css';
+import './index.css';
+import './tailwind.output.css';
+import './components/Startup Cards.jsx';
+import AccessResources from './pages/AccessResources.jsx';     
 
 export default function App() {
   return (
@@ -14,6 +19,7 @@ export default function App() {
         <Route path='/' element={<Home />} />
         <Route path='/explore' element={<ExploreStartups />} />
         <Route path='/join' element={<JoinNow />} />
+        <Route path='/access-resources' element={<AccessResources />} />
       </Routes>
     </Router>
   </div>  

@@ -9,24 +9,20 @@ export default function Navbar() {
             <Link to="/" className="Home">HOME</Link>
           </li>
           <li>
-            <Link to="/explore-startups" className="ExploreStartups">
-              EXPLORE STARTUPS
-            </Link>
+            <Link to="/explore">EXPLORE STARTUPS</Link>
+                  EXPLORE STARTUPS
           </li>
           <li>
             <Link to="/access-resources" className="nav-link">
               ACCESS RESOURCES
             </Link>
           </li>
-          <li>
-            <Link to="/contact" className="nav-link">
-              CONTACT
+         </ul>
+            <Link to="/join" className="nav-link" >
+             <button>
+              Join Now
+             </button>
             </Link>
-          </li>
-        </ul>
-             <button className="join-now-btn">
-              <Link to="/join">Join Now</Link>
-            </button>
       </div>
     </header>
   );

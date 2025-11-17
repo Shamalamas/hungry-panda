@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function ExploreStartupsDark() {
+export default function StartupCards() {
   const [search, setSearch] = useState("");
 
   const startups = [

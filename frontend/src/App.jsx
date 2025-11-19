@@ -3,8 +3,7 @@ import Home from './pages/Home';
 import ExploreStartups from './pages/ExploreStartups';
 import JoinNow from './pages/JoinNow';
 import Navbar from './components/Navbar';
-import './components/Startup Cards.jsx';
-import AccessResources from './pages/Access Resources.jsx';     
+import AccessResources from './pages/AccessResources.jsx';    
 
 export default function App() {
   return (
@@ -14,9 +13,9 @@ export default function App() {
       <Navbar />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/explore' element={<ExploreStartups />} />
-        <Route path='/join' element={<JoinNow />} />
-        <Route path='/access-resources' element={<AccessResources />} />
+        <Route path='/ExploreStartups' element={<ExploreStartups />} />
+        <Route path='/JoinNow' element={<JoinNow />} />
+        <Route path='/AccessResources' element={<AccessResources />} />
       </Routes>
     </Router>
   </div>  

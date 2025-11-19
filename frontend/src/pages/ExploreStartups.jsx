@@ -1,10 +1,9 @@
 
-import StartupCards from "../components/Startup Cards";   
+import StartupCards from "../components/StartupCards";   
 
 export default function ExploreStartups() { 
     return (
       <>
-        
         <StartupCards />
       </>
     );

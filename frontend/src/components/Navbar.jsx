@@ -9,16 +9,18 @@ export default function Navbar() {
             <Link to="/" className="Home">HOME</Link>
           </li>
           <li>
-            <Link to="/explore">EXPLORE STARTUPS</Link>
-                  EXPLORE STARTUPS
+            <Link to="/ExploreStartups" className="navlink">
+              EXPLORE STARTUPS
+            </Link>
+                  
           </li>
           <li>
-            <Link to="/access-resources" className="nav-link">
+            <Link to="/AccessResources" className="navlink">
               ACCESS RESOURCES
             </Link>
           </li>
          </ul>
-            <Link to="/join" className="nav-link" >
+            <Link to="/JoinNow" className="navlink" >
              <button>
               Join Now
              </button>

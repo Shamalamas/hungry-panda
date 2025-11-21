@@ -1,8 +1,9 @@
+import AccessResourcesAlt from "../components/AccessResourcesAlt";
 
 export default function AccessResources() { 
     return (        
         <>
-          <h1>Access Resources Page</h1>                            
+            <AccessResourcesAlt />
         </>
     );
 }

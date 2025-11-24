@@ -18,7 +18,7 @@ export default function StartupCards() {
   );
 
   return (
-    <main className="min-h-screen bg-black text-white py-24 px-6">
+    <main className="min-h-screen bg-black text-white py-24 px-6 pt-6">
      
       <div className="max-w-5xl mx-auto">
        

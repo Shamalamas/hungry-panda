@@ -65,7 +65,7 @@ export default function Navbar() {
         </div>
         
         
-       <NavLink to="/JoinNow" className="p-0">
+       <NavLink to="/JoinNow" className="p-4">
           <button 
             className="px-6 py-2 rounded-full text-sm font-bold text-white/90 backdrop-blur-xl 
                        bg-white/5 border border-white/20 

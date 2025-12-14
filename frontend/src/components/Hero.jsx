@@ -1,12 +1,24 @@
 export default function Hero() {
   return (
-    <section className="text-center mt-40">
-      <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-500 via-purple-600 to-pink-500 bg-clip-text text-transparent">
-        Welcome to the Entrepreneurship Hub
-      </h1>
-      <h2 className="text-2xl text-gray-300 italic mt-4">
-        Empowering startups to grow, connect, and succeed.
-      </h2>
-    </section>
+   <main className="bg-black text-white py-15 px-6 pt-10">
+
+     
+      <div className="max-w-5xl mx-auto">
+       
+        <header className="text-center">
+          <h1
+            className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-2"
+            style={{ textShadow: "0 0 18px rgba(99,102,241,0.85)" }}
+          >
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-violet-400">
+              Welcome to the Entrepreneurship Hub
+            </span>
+          </h1>
+          <p className="text-sm sm:text-base text-indigo-200/60">
+              Empowering Innovators, Connecting Startups, and Fueling Growth.
+          </p>
+        </header>
+      </div>
+    </main>
   );
 }

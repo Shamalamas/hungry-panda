@@ -3,6 +3,9 @@
 # Combined Node (Vite + React) + Python (FastAPI)
 # ============================
 
+# Root dependencies (safety net)
+node_modules/
+
 # --------------------------------
 # FRONTEND (Vite + React)
 # --------------------------------
@@ -13,11 +16,6 @@ frontend/.DS_Store
 frontend/.vscode/
 frontend/.idea/
 frontend/*.log
-
-# Ignore dependency lock and cache files
-frontend/package-lock.json
-frontend/yarn.lock
-frontend/pnpm-lock.yaml
 
 # Build / cache
 frontend/.vite/

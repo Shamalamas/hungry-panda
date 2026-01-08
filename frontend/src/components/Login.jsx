@@ -1,35 +1,35 @@
-import * as React from 'react';
-import { SignInPage } from '@toolpad/core/SignInPage';
-import { AppProvider } from '@toolpad/core/AppProvider';
-import { useTheme } from '@mui/material/styles';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import MagicLinkAlertSignInPage from "../components/Login";
 
-const providers = [{ id: 'nodemailer', name: 'Email' }];
-
-const signIn = async (provider) => {
-  const promise = new Promise((resolve) => {
-    setTimeout(() => {
-      console.log(`Sign in with ${provider.id}`);
-      // preview-start
-      resolve({
-        success: 'Check your email for a verification link.',
-      });
-      // preview-end
-    }, 500);
-  });
-  return promise;
+const pageVariants = {
+  initial: { opacity: 0, y: 20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -20 },
 };
 
-export default function MagicLinkAlertSignInPage() {
-  const theme = useTheme();
+export default function JoinNow() {
+  const [shouldExit, setShouldExit] = useState(false);
+  const navigate = useNavigate();
+
+  const handleEmailSubmit = () => {
+    setShouldExit(true);
+    setTimeout(() => {
+      navigate("/ExploreStartups");
+    }, 400); // match transition duration
+  };
+
   return (
-    // preview-start
-    <AppProvider theme={theme}>
-      <SignInPage
-        signIn={signIn}
-        providers={providers}
-        slotProps={{ emailField: { autoFocus: false }, form: { noValidate: true } }}
-      />
-    </AppProvider>
-    // preview-end
+    <motion.div
+      className="w-full h-full min-h-screen"
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      transition={{ duration: 0.4, ease: "easeInOut" }}
+    >
+      <MagicLinkAlertSignInPage onEmailSubmit={handleEmailSubmit} />
+    </motion.div>
   );
 }

@@ -2,14 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-gradient-to-r from-black to-blue-950 text-white font-sans;
+
+@keyframes liquidFloat {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-120px, 80px) scale(1.15);
+  }
+  100% {
+    transform: translate(100px, -60px) scale(1);
+  }
 }
 
-.join-now-btn {
-  @apply bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition;
+
+.glass-section {
+  background: rgba(2, 6, 23, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
-.nav-link {
-  @apply text-sm font-semibold uppercase tracking-wide hover:text-pink-400;
+
+.glow {
+  text-shadow: 0 0 30px rgba(99, 102, 241, 0.45);
 }
+
+
+
+

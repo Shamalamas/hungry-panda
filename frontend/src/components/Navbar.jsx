@@ -1,79 +1,79 @@
 import { NavLink } from "react-router-dom";
 
-
 const getNavLinkClass = ({ isActive }) => {
-  const baseClasses = "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 uppercase tracking-wider";
-  
-  const activeClasses = 'bg-indigo-600/70 text-white border border-indigo-500 shadow-md';
-  const inactiveClasses = 'text-indigo-300 hover:text-white hover:bg-indigo-900/30 border border-transparent';
+  const baseClasses =
+    "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 uppercase tracking-wider";
+
+  const activeClasses =
+    "bg-indigo-500/40 text-white";
+
+  const inactiveClasses =
+    "text-indigo-300/80 hover:text-white hover:bg-white/5";
 
   return `${baseClasses} ${isActive ? activeClasses : inactiveClasses}`;
 };
 
-
-const getNavLinkStyle = ({ isActive }) => {
-  return {
-    boxShadow: isActive 
-      ? "0 0 15px rgba(99,102,241,0.4)" 
-      : "none"
-  };
-};
-
+const getNavLinkStyle = ({ isActive }) => ({
+  boxShadow: isActive
+    ? "0 0 20px rgba(139,92,246,0.35)"
+    : "none",
+});
 
 export default function Navbar() {
-  
-  const resourcePath = '/AccessResources';
+  const resourcePath = "/AccessResources";
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50">
-      <nav 
-        className="flex justify-between items-center p-4 bg-black/50 backdrop-blur-sm border-b border-indigo-900/40 shadow-lg px-8"
-        style={{ boxShadow: "0 0 20px rgba(99,102,241,0.15)" }}
+    <header className="fixed top-0 left-0 w-full z-50 pointer-events-none">
+      <nav
+        className="
+          pointer-events-auto
+          flex justify-between items-center
+          p-4 px-8
+          bg-black/25 backdrop-blur-md
+          border-b border-white/5
+          transition-all duration-300
+        "
+        style={{
+          boxShadow: "0 8px 40px rgba(0,0,0,0.25)",
+        }}
       >
-        
-       
+    
         <div className="flex space-x-6 mx-auto">
-          
-          
-          <NavLink 
-            to="/" 
+          <NavLink
+            to="/"
             className={getNavLinkClass}
             style={getNavLinkStyle}
-            // Add 'end' prop to ensure only the exact path '/' is active
             end
           >
             HOME
           </NavLink>
-          
-          
-          <NavLink 
-            to="/ExploreStartups" 
+
+          <NavLink
+            to="/ExploreStartups"
             className={getNavLinkClass}
             style={getNavLinkStyle}
           >
             EXPLORE STARTUPS
           </NavLink>
-          
-          
-          <NavLink 
-            to={resourcePath} 
+
+          <NavLink
+            to={resourcePath}
             className={getNavLinkClass}
             style={getNavLinkStyle}
           >
             ACCESS RESOURCES
           </NavLink>
         </div>
-        
-        
-       <NavLink to="/JoinNow" className="p-4">
-          <button 
-            className="px-6 py-2 rounded-full text-sm font-bold text-white/90 backdrop-blur-xl 
-                       bg-white/5 border border-white/20 
-                       transition-all duration-300 hover:bg-white/10 hover:text-white"
-            style={{ 
-              
-              boxShadow: "0 0 20px rgba(139, 92, 246, 0.4), inset 0 0 15px rgba(255, 255, 255, 0.15)",
-            }}
+
+ 
+        <NavLink to="/JoinNow" className="p-4 pointer-events-auto">
+          <button
+            className="
+              px-6 py-2 rounded-full text-sm font-bold text-white/90
+              backdrop-blur-xl bg-white/5
+              transition-all duration-300
+              hover:bg-white/10 hover:text-white
+            "
           >
             Join Now
           </button>

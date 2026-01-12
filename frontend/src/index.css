@@ -2,31 +2,3 @@
 @tailwind components;
 @tailwind utilities;
 
-
-@keyframes liquidFloat {
-  0% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(-120px, 80px) scale(1.15);
-  }
-  100% {
-    transform: translate(100px, -60px) scale(1);
-  }
-}
-
-
-.glass-section {
-  background: rgba(2, 6, 23, 0.55);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-
-
-.glow {
-  text-shadow: 0 0 30px rgba(99, 102, 241, 0.45);
-}
-
-
-
-

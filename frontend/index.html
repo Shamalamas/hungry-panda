@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Entrepreneurship Hub</title>
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+
+    <!-- Prevent white flash before React mounts -->
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background-color: #000;
+      }
+
+      #root {
+        min-height: 100%;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

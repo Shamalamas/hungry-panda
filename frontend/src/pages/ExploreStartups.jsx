@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import AnimatedBackground from "../components/AnimatedBackground";
 
 export default function ExploreStartups() {
   const startups = [
@@ -8,13 +9,11 @@ export default function ExploreStartups() {
     { name: "AgroNova", industry: "AgriTech", desc: "Innovating agriculture through smart sensors." },
   ];
 
- 
   const containerVariants = {
     hidden: {},
     visible: { transition: { staggerChildren: 0.2, delayChildren: 0.1 } },
   };
 
- 
   const fadeUpVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
@@ -23,14 +22,15 @@ export default function ExploreStartups() {
 
   return (
     <motion.div
-      className="relative min-h-screen bg-black"
+      className="relative min-h-screen"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
       exit="hidden"
     >
+      <AnimatedBackground />
+
       <motion.main className="pt-28 px-8 text-white relative z-10 flex flex-col gap-12">
-    
         <motion.header
           className="text-center flex flex-col gap-3 items-center"
           variants={fadeUpVariants}
@@ -45,7 +45,6 @@ export default function ExploreStartups() {
           </p>
         </motion.header>
 
-       
         <motion.div className="max-w-4xl mx-auto" variants={fadeUpVariants}>
           <input
             type="text"
@@ -60,10 +59,9 @@ export default function ExploreStartups() {
           />
         </motion.div>
 
-       
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto"
-          variants={containerVariants} 
+          variants={containerVariants}
         >
           {startups.map((startup, index) => (
             <motion.div
@@ -74,21 +72,18 @@ export default function ExploreStartups() {
                 rounded-2xl p-8
                 shadow-lg cursor-pointer
               "
-              variants={fadeUpVariants} 
+              variants={fadeUpVariants}
               whileHover="hover"
             >
-            
               <div className="mb-3">
                 <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-indigo-900/40 text-indigo-300 border border-indigo-700/50">
                   {startup.industry}
                 </span>
               </div>
 
-             
               <h2 className="text-2xl font-semibold mb-2">{startup.name}</h2>
               <p className="text-white/80 mb-6">{startup.desc}</p>
 
-             
               <button className="px-4 py-2 rounded-lg text-sm bg-indigo-500/20 hover:bg-indigo-500/40 transition-all duration-300">
                 View More
               </button>

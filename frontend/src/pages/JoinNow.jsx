@@ -9,7 +9,7 @@ export default function JoinNow() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-black flex items-center justify-center">
+    <div className="min-h-screen w-full  flex items-center justify-center">
       <MagicLinkAlertSignInPage onSuccess={handleSuccess} />
     </div>
   );

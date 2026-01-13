@@ -47,28 +47,34 @@ const resources = [
 ];
 
 const ResourcesPage = () => {
- 
   const headingVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
   };
 
-  
+  // Much bigger hover
   const cardVariants = {
     hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-    hover: { scale: 1.05, transition: { duration: 0.3 } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
+    hover: {
+      scale: 1.18,        // 🔥 bigger pop
+      y: -18,             // lift up
+      transition: { duration: 0.25, ease: "easeOut" },
+    },
   };
 
   return (
     <motion.div
-      className="relative min-h-screen bg-black"
+      className="relative min-h-screen"
       initial="hidden"
       animate="visible"
       exit="hidden"
     >
       <motion.main className="pt-28 px-8 text-white relative z-10 flex flex-col gap-12">
-      
         <motion.header
           className="text-center mb-12 flex flex-col gap-3 items-center"
           variants={headingVariants}
@@ -83,7 +89,6 @@ const ResourcesPage = () => {
           </p>
         </motion.header>
 
-       
         <motion.div
           className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto"
           initial="hidden"
@@ -92,31 +97,53 @@ const ResourcesPage = () => {
           {resources.map((res, index) => (
             <motion.div
               key={res.title}
-              className="
-                bg-black/35 backdrop-blur-lg
-                border border-indigo-500/20
-                rounded-2xl p-6
-                shadow-lg cursor-pointer
-                transition-all duration-300
-              "
               variants={cardVariants}
               whileHover="hover"
               initial="hidden"
               animate="visible"
-              transition={{ delay: 0.6 + index * 0.15 }} // 0.6s delay to start after heading
+              transition={{ delay: 0.6 + index * 0.15 }}
+              className="
+                relative
+                transform-gpu
+                cursor-pointer
+                rounded-2xl p-6
+                bg-black/35 backdrop-blur-lg
+                border border-indigo-500/20
+                shadow-lg
+                transition-all duration-300
+                will-change-transform
+              "
+              style={{ transformOrigin: "center" }}
             >
-           
+              {/* Glow layer (appears on hover) */}
+              <div
+                className="
+                  pointer-events-none
+                  absolute inset-0 rounded-2xl
+                  opacity-0
+                  transition-opacity duration-300
+                  group-hover:opacity-100
+                "
+              />
+
+              {/* Make it float above neighbors when hovered */}
+              <motion.div
+                className="absolute inset-0 rounded-2xl pointer-events-none"
+                whileHover={{
+                  boxShadow:
+                    "0 40px 120px rgba(99,102,241,0.35), 0 0 60px rgba(255,255,255,0.10)",
+                }}
+              />
+
               <div className="mb-3">
                 <span className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium bg-indigo-900/40 text-indigo-300 border border-indigo-700/50">
                   {res.type}
                 </span>
               </div>
 
-             
               <h2 className="text-2xl font-semibold mb-2">{res.title}</h2>
               <p className="text-white/80 mb-4">{res.description}</p>
 
-             
               <a
                 href={res.link}
                 target="_blank"
@@ -143,6 +170,11 @@ const ResourcesPage = () => {
                 </svg>
                 Go to Resource
               </a>
+
+              {/* z-index bump on hover */}
+              <style>{`
+                .resource-card:hover { z-index: 50; }
+              `}</style>
             </motion.div>
           ))}
         </motion.div>

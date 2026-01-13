@@ -1,67 +1,65 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { useEffect } from "react";
 
 import Home from "./pages/Home";
 import ExploreStartups from "./pages/ExploreStartups";
 import JoinNow from "./pages/JoinNow";
-import Navbar from "./components/Navbar";
 import AccessResources from "./pages/AccessResources.jsx";
+import Navbar from "./components/Navbar";
+import AnimatedBackground from "./components/AnimatedBackground";
 
 function AnimatedRoutes() {
   const location = useLocation();
 
-  // Home keeps its own animated background
-  const isHome = location.pathname === "/";
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   return (
-    // Only apply black background to NON-home pages
-    <div className={`min-h-screen ${!isHome ? "bg-black" : ""}`}>
-      <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
-          <Route
-            path="/"
-            element={
-              <PageWrapper noBackground>
-                <Home />
-              </PageWrapper>
-            }
-          />
-          <Route
-            path="/ExploreStartups"
-            element={
-              <PageWrapper>
-                <ExploreStartups />
-              </PageWrapper>
-            }
-          />
-          <Route
-            path="/JoinNow"
-            element={
-              <PageWrapper>
-                <JoinNow />
-              </PageWrapper>
-            }
-          />
-          <Route
-            path="/AccessResources"
-            element={
-              <PageWrapper>
-                <AccessResources />
-              </PageWrapper>
-            }
-          />
-        </Routes>
-      </AnimatePresence>
-    </div>
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route
+          path="/"
+          element={
+            <PageWrapper>
+              <Home />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/ExploreStartups"
+          element={
+            <PageWrapper>
+              <ExploreStartups />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/JoinNow"
+          element={
+            <PageWrapper>
+              <JoinNow />
+            </PageWrapper>
+          }
+        />
+        <Route
+          path="/AccessResources"
+          element={
+            <PageWrapper>
+              <AccessResources />
+            </PageWrapper>
+          }
+        />
+      </Routes>
+    </AnimatePresence>
   );
 }
 
-function PageWrapper({ children, noBackground = false }) {
+function PageWrapper({ children }) {
   return (
     <motion.div
-      className={`min-h-screen w-full ${
-        noBackground ? "" : "bg-black"
-      }`}
+      className="relative z-10 min-h-screen w-full"
       initial={{ opacity: 0, y: 20 }}
       animate={{
         opacity: 1,
@@ -82,6 +80,7 @@ function PageWrapper({ children, noBackground = false }) {
 export default function App() {
   return (
     <BrowserRouter>
+      <AnimatedBackground />
       <Navbar />
       <AnimatedRoutes />
     </BrowserRouter>

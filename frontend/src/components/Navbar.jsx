@@ -1,14 +1,12 @@
 import { NavLink, useNavigate } from "react-router-dom";
+import { getUser, getToken, logout, getPendingUsername } from "../lib/api";
 import { useEffect, useState } from "react";
-import { getToken, getUser, logout } from "../lib/api";
 
 const getNavLinkClass = ({ isActive }) => {
   const baseClasses =
     "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 uppercase tracking-wider";
-
   const activeClasses = "bg-indigo-500/40 text-white";
   const inactiveClasses = "text-indigo-300/80 hover:text-white hover:bg-white/5";
-
   return `${baseClasses} ${isActive ? activeClasses : inactiveClasses}`;
 };
 
@@ -17,28 +15,39 @@ const getNavLinkStyle = ({ isActive }) => ({
 });
 
 export default function Navbar() {
-  const resourcePath = "/AccessResources";
   const navigate = useNavigate();
-
-  const [isAuthed, setIsAuthed] = useState(Boolean(getToken()));
+  const [signedIn, setSignedIn] = useState(!!getToken());
   const [user, setUser] = useState(getUser());
 
   useEffect(() => {
     const sync = () => {
-      setIsAuthed(Boolean(getToken()));
+      setSignedIn(!!getToken());
       setUser(getUser());
     };
 
-    window.addEventListener("storage", sync);
     sync();
-    return () => window.removeEventListener("storage", sync);
+    window.addEventListener("auth:changed", sync);
+    window.addEventListener("storage", sync);
+    window.addEventListener("focus", sync);
+
+    return () => {
+      window.removeEventListener("auth:changed", sync);
+      window.removeEventListener("storage", sync);
+      window.removeEventListener("focus", sync);
+    };
   }, []);
 
-  const handleLogout = () => {
-    logout();
-    setIsAuthed(false);
-    setUser(null);
-    navigate("/");
+  const label = user?.username || user?.name || getPendingUsername() || "";
+
+  const handleAuthClick = () => {
+    if (signedIn) {
+      logout();
+      setSignedIn(false);
+      setUser(null);
+      navigate("/");
+    } else {
+      navigate("/JoinNow");
+    }
   };
 
   return (
@@ -59,48 +68,62 @@ export default function Navbar() {
             HOME
           </NavLink>
 
-          <NavLink to="/ExploreStartups" className={getNavLinkClass} style={getNavLinkStyle}>
+          <NavLink
+            to="/ExploreStartups"
+            className={getNavLinkClass}
+            style={getNavLinkStyle}
+          >
             EXPLORE STARTUPS
           </NavLink>
 
-          <NavLink to={resourcePath} className={getNavLinkClass} style={getNavLinkStyle}>
+          <NavLink
+            to="/AccessResources"
+            className={getNavLinkClass}
+            style={getNavLinkStyle}
+          >
             ACCESS RESOURCES
           </NavLink>
         </div>
 
-        <div className="p-4 pointer-events-auto flex items-center gap-3">
-          {isAuthed && user?.username ? (
-            <span className="text-xs text-indigo-200/70 hidden sm:inline">
-              {user.username}
-            </span>
-          ) : null}
-
-          {isAuthed ? (
-            <button
-              onClick={handleLogout}
+        <div className="p-4 pointer-events-auto flex items-center gap-4">
+          {signedIn && label ? (
+            <div
               className="
-                px-6 py-2 rounded-full text-sm font-bold text-white/90
-                backdrop-blur-xl bg-white/5
-                transition-all duration-300
-                hover:bg-white/10 hover:text-white
+                flex items-center gap-2
+                px-4 py-1.5
+                rounded-full
+                bg-white/5 backdrop-blur-md
+                border border-white/10
+                text-sm font-medium text-indigo-200
+                shadow-[0_0_20px_rgba(99,102,241,0.25)]
+                select-none
               "
             >
-              Logout
-            </button>
-          ) : (
-            <NavLink to="/JoinNow">
-              <button
+              <span
                 className="
-                  px-6 py-2 rounded-full text-sm font-bold text-white/90
-                  backdrop-blur-xl bg-white/5
-                  transition-all duration-300
-                  hover:bg-white/10 hover:text-white
+                  w-6 h-6 flex items-center justify-center
+                  rounded-full
+                  bg-indigo-500/30
+                  text-indigo-200 text-xs font-bold
                 "
               >
-                Join Now
-              </button>
-            </NavLink>
-          )}
+                {label.charAt(0).toUpperCase()}
+              </span>
+              <span>{label}</span>
+            </div>
+          ) : null}
+
+          <button
+            onClick={handleAuthClick}
+            className="
+              px-6 py-2 rounded-full text-sm font-bold text-white/90
+              backdrop-blur-xl bg-white/5
+              transition-all duration-300
+              hover:bg-white/10 hover:text-white
+            "
+          >
+            {signedIn ? "LOG OUT" : "JOIN NOW"}
+          </button>
         </div>
       </nav>
     </header>

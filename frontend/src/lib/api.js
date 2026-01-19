@@ -1,5 +1,9 @@
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
+function emitAuthChanged() {
+  window.dispatchEvent(new Event("auth:changed"));
+}
+
 export function getToken() {
   return localStorage.getItem("access_token");
 }
@@ -11,6 +15,23 @@ export function getUser() {
   } catch {
     return null;
   }
+}
+
+export function getPendingUsername() {
+  return localStorage.getItem("pending_username");
+}
+
+export function setPendingUsername(username) {
+  if (typeof username === "string" && username.trim()) {
+    localStorage.setItem("pending_username", username.trim());
+    emitAuthChanged();
+  }
+}
+
+export function clearPendingAuth() {
+  localStorage.removeItem("pending_username");
+  localStorage.removeItem("pending_email");
+  emitAuthChanged();
 }
 
 async function safeJson(res) {
@@ -74,9 +95,13 @@ export async function verifyMagicLink(token) {
 export function persistSession({ access_token, user }) {
   localStorage.setItem("access_token", access_token);
   localStorage.setItem("user", JSON.stringify(user));
+  clearPendingAuth();
+  emitAuthChanged();
 }
 
 export function logout() {
   localStorage.removeItem("access_token");
   localStorage.removeItem("user");
+  clearPendingAuth();
+  emitAuthChanged();
 }

@@ -1,16 +1,11 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import AnimatedBackground from "../components/AnimatedBackground";
+import { fetchStartups } from "../lib/api";
 
 export default function ExploreStartups() {
   const [search, setSearch] = useState("");
-
-  const startups = [
-    { name: "EcoFlow", industry: "Clean Energy", desc: "Portable power solutions for sustainable living." },
-    { name: "MediLink", industry: "HealthTech", desc: "Connecting patients with healthcare providers instantly." },
-    { name: "FinPilot", industry: "FinTech", desc: "AI tools for smarter personal finance." },
-    { name: "AgroNova", industry: "AgriTech", desc: "Innovating agriculture through smart sensors." },
-  ];
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const containerVariants = {
     hidden: {},
@@ -23,18 +18,28 @@ export default function ExploreStartups() {
     hover: { scale: 1.05, transition: { duration: 0.25 } },
   };
 
-  const filtered = useMemo(() => {
-    const q = search.trim().toLowerCase();
-    if (!q) return startups;
+  useEffect(() => {
+    let alive = true;
 
-    return startups.filter((s) => {
-      return (
-        s.name.toLowerCase().includes(q) ||
-        s.industry.toLowerCase().includes(q) ||
-        s.desc.toLowerCase().includes(q)
-      );
-    });
+    const run = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchStartups(search);
+        if (!alive) return;
+        setItems(Array.isArray(data.items) ? data.items : []);
+      } finally {
+        if (alive) setLoading(false);
+      }
+    };
+
+    const t = setTimeout(run, 250);
+    return () => {
+      alive = false;
+      clearTimeout(t);
+    };
   }, [search]);
+
+  const filtered = useMemo(() => items, [items]);
 
   return (
     <motion.div
@@ -44,13 +49,8 @@ export default function ExploreStartups() {
       animate="visible"
       exit="hidden"
     >
-      <AnimatedBackground />
-
       <motion.main className="pt-28 px-8 text-white relative z-10 flex flex-col gap-10">
-        <motion.header
-          className="text-center flex flex-col gap-3 items-center"
-          variants={fadeUpVariants}
-        >
+        <motion.header className="text-center flex flex-col gap-3 items-center" variants={fadeUpVariants}>
           <h1 className="text-4xl sm:text-5xl font-bold">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-500">
               Explore Startups
@@ -61,10 +61,7 @@ export default function ExploreStartups() {
           </p>
         </motion.header>
 
-        <motion.div
-          className="max-w-md mx-auto w-full"
-          variants={fadeUpVariants}
-        >
+        <motion.div className="max-w-md mx-auto w-full" variants={fadeUpVariants}>
           <input
             type="text"
             value={search}
@@ -80,6 +77,9 @@ export default function ExploreStartups() {
               focus:outline-none focus:ring-2 focus:ring-indigo-500/40
             "
           />
+          <div className="mt-2 h-5 text-center text-xs text-indigo-200/60">
+            {loading ? "Searching..." : " "}
+          </div>
         </motion.div>
 
         <motion.div
@@ -87,9 +87,23 @@ export default function ExploreStartups() {
           variants={containerVariants}
           layout
         >
+          {loading && filtered.length === 0 && (
+            <motion.div
+              key="loading"
+              className="col-span-full text-center text-indigo-200/60 py-8"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 6 }}
+              transition={{ duration: 0.2 }}
+              layout
+            >
+              Loading…
+            </motion.div>
+          )}
+
           {filtered.map((startup) => (
             <motion.div
-              key={startup.name}
+              key={startup.id ?? startup.name}
               className="
                 bg-black/35 backdrop-blur-lg
                 border border-indigo-500/20
@@ -119,7 +133,7 @@ export default function ExploreStartups() {
             </motion.div>
           ))}
 
-          {filtered.length === 0 && (
+          {!loading && filtered.length === 0 && (
             <motion.div
               key="empty"
               className="col-span-full text-center text-indigo-200/60 py-8"

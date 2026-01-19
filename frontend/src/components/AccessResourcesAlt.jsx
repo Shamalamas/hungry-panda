@@ -1,58 +1,25 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import {
+  getToken,
+  fetchPublicResources,
+  fetchResourcesAuthed,
+} from "../lib/api";
 
-const resources = [
-  {
-    title: "Harvard Business Review",
-    description:
-      "Insights and best practices for management, strategy, and leadership.",
-    link: "https://hbr.org/",
-    type: "Business Strategy",
-  },
-  {
-    title: "Nielsen Norman Group",
-    description:
-      "World-leading research and expert guidance on user experience (UX) design.",
-    link: "https://www.nngroup.com/",
-    type: "Design & UX",
-  },
-  {
-    title: "Khan Academy",
-    description:
-      "Free courses and educational resources covering math, science, economics, and arts.",
-    link: "https://www.khanacademy.org/",
-    type: "General Education",
-  },
-  {
-    title: "Coursera",
-    description:
-      "Online courses and specializations from top universities and companies worldwide.",
-    link: "https://www.coursera.org/",
-    type: "Professional Courses",
-  },
-  {
-    title: "The Economist",
-    description:
-      "Global analysis of politics, current affairs, business, and finance.",
-    link: "https://www.economist.com/",
-    type: "Current Affairs",
-  },
-  {
-    title: "NASA Image and Video Library",
-    description:
-      "High-resolution media resources covering space exploration and scientific discovery.",
-    link: "https://images.nasa.gov/",
-    type: "Science & Research",
-  },
-];
+export default function AccessResourcesAlt() {
+  const [resources, setResources] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-const ResourcesPage = () => {
   const headingVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
   };
 
-  // Much bigger hover
   const cardVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
@@ -61,11 +28,40 @@ const ResourcesPage = () => {
       transition: { duration: 0.6, ease: "easeOut" },
     },
     hover: {
-      scale: 1.18,        // 🔥 bigger pop
-      y: -18,             // lift up
+      scale: 1.18,
+      y: -18,
       transition: { duration: 0.25, ease: "easeOut" },
     },
   };
+
+  useEffect(() => {
+    let alive = true;
+
+    async function loadResources() {
+      setLoading(true);
+      setError("");
+
+      try {
+        const token = getToken();
+        const data = token
+          ? await fetchResourcesAuthed()
+          : await fetchPublicResources();
+
+        if (!alive) return;
+        setResources(Array.isArray(data.items) ? data.items : []);
+      } catch (err) {
+        if (!alive) return;
+        setError(err.message || "Failed to load resources");
+      } finally {
+        if (alive) setLoading(false);
+      }
+    }
+
+    loadResources();
+    return () => {
+      alive = false;
+    };
+  }, []);
 
   return (
     <motion.div
@@ -84,9 +80,15 @@ const ResourcesPage = () => {
               Resources
             </span>
           </h1>
+
           <p className="text-indigo-200/60 max-w-xl">
-            Curated guides, tutorials, and tools for building the future across disciplines.
+            Curated guides, tutorials, and tools for building the future across
+            disciplines.
           </p>
+
+          <div className="h-5 text-xs text-indigo-200/60">
+            {loading ? "Loading resources..." : error ? error : " "}
+          </div>
         </motion.header>
 
         <motion.div
@@ -113,20 +115,7 @@ const ResourcesPage = () => {
                 transition-all duration-300
                 will-change-transform
               "
-              style={{ transformOrigin: "center" }}
             >
-              {/* Glow layer (appears on hover) */}
-              <div
-                className="
-                  pointer-events-none
-                  absolute inset-0 rounded-2xl
-                  opacity-0
-                  transition-opacity duration-300
-                  group-hover:opacity-100
-                "
-              />
-
-              {/* Make it float above neighbors when hovered */}
               <motion.div
                 className="absolute inset-0 rounded-2xl pointer-events-none"
                 whileHover={{
@@ -154,33 +143,18 @@ const ResourcesPage = () => {
                   transition-all duration-300
                 "
               >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                  />
-                </svg>
                 Go to Resource
               </a>
-
-              {/* z-index bump on hover */}
-              <style>{`
-                .resource-card:hover { z-index: 50; }
-              `}</style>
             </motion.div>
           ))}
+
+          {!loading && !error && resources.length === 0 && (
+            <div className="col-span-full text-center text-indigo-200/60 py-8">
+              No resources found.
+            </div>
+          )}
         </motion.div>
       </motion.main>
     </motion.div>
   );
-};
-
-export default ResourcesPage;
+}
